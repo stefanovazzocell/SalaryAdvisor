@@ -17,7 +17,7 @@ type Percentage int64
 // Optionally allows for negative values.
 // Valid strings examples are:
 // "10%", "60.5", "%100", "12.34%", "-43.29"
-func NewPercentage(percentageStr string, allowNegative bool) (Percentage, error) {
+func ParsePercentage(percentageStr string, allowNegative bool) (Percentage, error) {
 	i, err := parseNumber(percentageStr, allowNegative, 6)
 	return Percentage(i), err
 }

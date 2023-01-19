@@ -23,7 +23,7 @@ func TestYear(t *testing.T) {
 	}
 
 	for testYearStr, testExpected := range testCases {
-		year := types.NewYear(testYearStr)
+		year := types.ParseYear(testYearStr)
 		if year != testExpected.year {
 			t.Fatalf("Expected %d for %q, instead got %d", testExpected.year, testYearStr, year)
 		}

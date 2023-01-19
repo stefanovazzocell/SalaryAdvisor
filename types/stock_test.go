@@ -57,7 +57,7 @@ func TestStock(t *testing.T) {
 	}
 
 	for testParam, testExpect := range testCases {
-		s, err := types.NewStock(testParam.value, testParam.conversion)
+		s, err := types.ParseStock(testParam.value, testParam.conversion)
 		t.Logf("Testing with types.NewStock(%q, %q)", testParam.value, testParam.conversion)
 		if err != nil && !testExpect.hasError {
 			t.Fatalf("Unexpected error: %v", err)
@@ -93,7 +93,7 @@ func TestStock(t *testing.T) {
 
 func TestStockPercentageSum(t *testing.T) {
 	// Stock().Percentage is, mostly, just a wrapper for Cash().Percentage
-	stock, err := types.NewStock("1000$", "2$")
+	stock, err := types.ParseStock("1000$", "2$")
 	if err != nil {
 		t.Errorf("Failed to setup stock: %v", err)
 	}
@@ -105,7 +105,7 @@ func TestStockPercentageSum(t *testing.T) {
 		t.Errorf("Detected incorrect value %d (%s)", value, value.String())
 	}
 	// Attempt overflow
-	stock, err = types.NewStock("1000000000$", "")
+	stock, err = types.ParseStock("1000000000$", "")
 	if err != nil {
 		t.Errorf("Failed to setup overflow stock: %v", err)
 	}

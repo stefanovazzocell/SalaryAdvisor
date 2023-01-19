@@ -28,7 +28,7 @@ type Province uint8
 
 // Returns a province if the code is recognized,
 // otherwise returns false
-func ProvinceFromCode(code string) (Province, bool) {
+func ParseProvince(code string) (Province, bool) {
 	code = strings.ToLower(code)
 	province, ok := codeToProvince[code]
 	return province, ok

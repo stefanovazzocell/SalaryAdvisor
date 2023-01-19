@@ -25,7 +25,7 @@ type Cash int64
 // Optionally allows for negative values.
 // Valid strings examples are:
 // "-12.5$", "50", "1'000CAD", "$1000", "-12`345.2ca$"
-func NewCash(cashStr string, allowNegative bool) (Cash, error) {
+func ParseCash(cashStr string, allowNegative bool) (Cash, error) {
 	i, err := parseNumber(cashStr, allowNegative, 4)
 	if cashMax < -cashMax || cashMax < i {
 		return 0, ErrorCashMaxed

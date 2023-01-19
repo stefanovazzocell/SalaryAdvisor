@@ -66,7 +66,7 @@ func TestCash(t *testing.T) {
 		{"-1'000'000'001", false}: {0, true, "", false},
 	}
 	for testParams, testResults := range testCases {
-		cash, err := types.NewCash(testParams.str, testParams.allowNegative)
+		cash, err := types.ParseCash(testParams.str, testParams.allowNegative)
 		// Check returned value
 		if cash != types.Cash(testResults.value) {
 			t.Fatalf("Expected %d for %v, instead got %d", testResults.value, testParams, cash)
@@ -88,7 +88,7 @@ func TestCash(t *testing.T) {
 			t.Fatalf("Expected %q from String() of %v, instead got %q", testResults.strFormat, testParams, str)
 		}
 		// Run reverse test
-		derivedCash, err := types.NewCash(str, testParams.allowNegative)
+		derivedCash, err := types.ParseCash(str, testParams.allowNegative)
 		if err != nil {
 			t.Fatalf("Got error during reverse test for %v: %v", testParams, err)
 		}
@@ -179,17 +179,17 @@ func TestCashFractionOf(t *testing.T) {
 func BenchmarkNewCash(b *testing.B) {
 	b.Run("zero", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
-			types.NewCash("0$", true)
+			types.ParseCash("0$", true)
 		}
 	})
 	b.Run("standard", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
-			types.NewCash("123'456.78", false)
+			types.ParseCash("123'456.78", false)
 		}
 	})
 	b.Run("complex", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
-			types.NewCash("ca$ -1'000'235.4959", true)
+			types.ParseCash("ca$ -1'000'235.4959", true)
 		}
 	})
 }
@@ -245,12 +245,12 @@ func FuzzCash(f *testing.F) {
 		f.Add(seed, false)
 	}
 	f.Fuzz(func(t *testing.T, cashStr string, allowNegative bool) {
-		cash, err := types.NewCash(cashStr, allowNegative)
+		cash, err := types.ParseCash(cashStr, allowNegative)
 		if err != nil {
 			t.SkipNow()
 		}
 		// Reverse
-		reversedCash, err := types.NewCash(cash.String(), allowNegative)
+		reversedCash, err := types.ParseCash(cash.String(), allowNegative)
 		if err != nil {
 			t.Fatalf("Failed to reverse cash: %v", err)
 		}

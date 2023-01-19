@@ -14,12 +14,12 @@ type Stock struct {
 // Ex: ("10USD", "1.23CAD/USD")
 // Note: conversion prices 0 and 1 mean the value is in CAD
 // i.e. ("10CAD", "0") == ("10CAD", "1")
-func NewStock(valueStr string, conversionStr string) (Stock, error) {
-	value, err := NewCash(valueStr, false)
+func ParseStock(valueStr string, conversionStr string) (Stock, error) {
+	value, err := ParseCash(valueStr, false)
 	if err != nil {
 		return Stock{}, err
 	}
-	conversion, err := NewCash(conversionStr, false)
+	conversion, err := ParseCash(conversionStr, false)
 	if err != nil {
 		return Stock{}, err
 	}

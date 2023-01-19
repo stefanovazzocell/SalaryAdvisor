@@ -30,7 +30,7 @@ func TestPercentage(t *testing.T) {
 	}
 
 	for testParams, testResults := range testCases {
-		percentage, err := types.NewPercentage(testParams.str, testParams.allowNegative)
+		percentage, err := types.ParsePercentage(testParams.str, testParams.allowNegative)
 		// Check returned value
 		if percentage != types.Percentage(testResults.value) {
 			t.Fatalf("Expected %d for %v, instead got %d", testResults.value, testParams, percentage)
@@ -52,7 +52,7 @@ func TestPercentage(t *testing.T) {
 			t.Fatalf("Expected %q from String() of %v, instead got %q", testResults.strFormat, testParams, str)
 		}
 		// Run reverse test
-		derivedPercentage, err := types.NewPercentage(str, testParams.allowNegative)
+		derivedPercentage, err := types.ParsePercentage(str, testParams.allowNegative)
 		if err != nil {
 			t.Fatalf("Got error during reverse test for %v: %v", testParams, err)
 		}
@@ -69,17 +69,17 @@ func TestPercentage(t *testing.T) {
 func BenchmarkNewPercentage(b *testing.B) {
 	b.Run("zero", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
-			types.NewPercentage("0", true)
+			types.ParsePercentage("0", true)
 		}
 	})
 	b.Run("standard", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
-			types.NewPercentage("12.3%", false)
+			types.ParsePercentage("12.3%", false)
 		}
 	})
 	b.Run("complex", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
-			types.NewPercentage("12.345678 %", true)
+			types.ParsePercentage("12.345678 %", true)
 		}
 	})
 }
@@ -130,12 +130,12 @@ func FuzzPercentage(f *testing.F) {
 		f.Add(seed, false)
 	}
 	f.Fuzz(func(t *testing.T, percentageStr string, allowNegative bool) {
-		percentage, err := types.NewPercentage(percentageStr, allowNegative)
+		percentage, err := types.ParsePercentage(percentageStr, allowNegative)
 		if err != nil {
 			t.SkipNow()
 		}
 		// Reverse
-		reversedPercentage, err := types.NewPercentage(percentage.String(), allowNegative)
+		reversedPercentage, err := types.ParsePercentage(percentage.String(), allowNegative)
 		if err != nil {
 			t.Fatalf("Failed to reverse percentage: %v", err)
 		}

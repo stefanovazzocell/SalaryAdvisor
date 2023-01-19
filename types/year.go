@@ -7,7 +7,7 @@ type Year int64
 
 // Parses a string into a year
 // If 0 or error, uses current year
-func NewYear(yearStr string) Year {
+func ParseYear(yearStr string) Year {
 	i, err := parseNumber(yearStr, false, 0)
 	if i == 0 || err != nil {
 		thisYear := time.Now().Year()
