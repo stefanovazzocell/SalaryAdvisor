@@ -1,6 +1,7 @@
 package types_test
 
 import (
+	"bytes"
 	"math"
 	"testing"
 
@@ -91,26 +92,29 @@ func TestStock(t *testing.T) {
 	}
 }
 
-func TestStockPercentageSum(t *testing.T) {
+func TestStockPercentageMarshall(t *testing.T) {
 	// Stock().Percentage is, mostly, just a wrapper for Cash().Percentage
 	stock, err := types.ParseStock("1000$", "2$")
 	if err != nil {
-		t.Errorf("Failed to setup stock: %v", err)
+		t.Fatalf("Failed to setup stock: %v", err)
+	}
+	if jsonStr, err := stock.MarshalText(); !bytes.Equal([]byte("2'000"), jsonStr) || err != nil {
+		t.Fatalf("Failed to MarshalText %v correctly, got %q, %v", stock, jsonStr, err)
 	}
 	stock, err = stock.Percentage(50 * types.PercentagePoint)
 	if err != nil {
-		t.Errorf("Failed to grab percentage stock: %v", err)
+		t.Fatalf("Failed to grab percentage stock: %v", err)
 	}
 	if _, value, _, _ := stock.Value(); value != 500*types.CashDollar {
-		t.Errorf("Detected incorrect value %d (%s)", value, value.String())
+		t.Fatalf("Detected incorrect value %d (%s)", value, value.String())
 	}
 	// Attempt overflow
 	stock, err = types.ParseStock("1000000000$", "")
 	if err != nil {
-		t.Errorf("Failed to setup overflow stock: %v", err)
+		t.Fatalf("Failed to setup overflow stock: %v", err)
 	}
 	stock, err = stock.Percentage(types.Percentage(math.MaxInt64))
 	if err == nil {
-		t.Errorf("Did not overflow Stock().Percentage, instead got %v", stock)
+		t.Fatalf("Did not overflow Stock().Percentage, instead got %v", stock)
 	}
 }

@@ -1,6 +1,7 @@
 package types_test
 
 import (
+	"bytes"
 	"testing"
 
 	"github.com/stefanovazzocell/SalaryAdvisor/types"
@@ -50,6 +51,11 @@ func TestPercentage(t *testing.T) {
 		str := percentage.String()
 		if str != testResults.strFormat {
 			t.Fatalf("Expected %q from String() of %v, instead got %q", testResults.strFormat, testParams, str)
+		}
+		// Check MarshalText conversion
+		jsonStr, err := percentage.MarshalText()
+		if !bytes.Equal(jsonStr, []byte(testResults.strFormat)) || err != nil {
+			t.Fatalf("Expected %q from MarshalText() of %v, instead got %q, %v", testResults.strFormat, testParams, jsonStr, err)
 		}
 		// Run reverse test
 		derivedPercentage, err := types.ParsePercentage(str, testParams.allowNegative)

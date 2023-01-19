@@ -33,3 +33,19 @@ func ParseProvince(code string) (Province, bool) {
 	province, ok := codeToProvince[code]
 	return province, ok
 }
+
+// Returns a string representation of the province
+// Returns "??" if unknown
+func (p Province) String() string {
+	for code, prov := range codeToProvince {
+		if prov == p {
+			return strings.ToUpper(code)
+		}
+	}
+	return "??"
+}
+
+// String, but for JSON marshalling
+func (p Province) MarshalText() (text []byte, err error) {
+	return []byte(p.String()), nil
+}

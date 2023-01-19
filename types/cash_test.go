@@ -1,6 +1,7 @@
 package types_test
 
 import (
+	"bytes"
 	"math"
 	"strconv"
 	"testing"
@@ -86,6 +87,11 @@ func TestCash(t *testing.T) {
 		str := cash.String()
 		if str != testResults.strFormat {
 			t.Fatalf("Expected %q from String() of %v, instead got %q", testResults.strFormat, testParams, str)
+		}
+		// Check MarshalText conversion
+		jsonStr, err := cash.MarshalText()
+		if !bytes.Equal(jsonStr, []byte(testResults.strFormat)) || err != nil {
+			t.Fatalf("Expected %q from MarshalText() of %v, instead got %q, %v", testResults.strFormat, testParams, jsonStr, err)
 		}
 		// Run reverse test
 		derivedCash, err := types.ParseCash(str, testParams.allowNegative)

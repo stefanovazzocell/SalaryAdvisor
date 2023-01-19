@@ -51,3 +51,8 @@ func (p Percentage) String() string {
 	}
 	return strconv.FormatInt(int64(p/100), 10) + decimal
 }
+
+// String, but for JSON marshalling
+func (p Percentage) MarshalText() (text []byte, err error) {
+	return []byte(p.String()), nil
+}

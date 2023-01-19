@@ -56,3 +56,11 @@ func (s Stock) Value() (cad Cash, orig Cash, isCAD bool, err error) {
 	}
 	return s.value * s.conversionPrice / CashDollar, s.value, false, nil
 }
+
+func (s Stock) MarshalText() (text []byte, err error) {
+	cad, _, _, err := s.Value()
+	if err != nil {
+		return []byte{}, err
+	}
+	return cad.MarshalText()
+}

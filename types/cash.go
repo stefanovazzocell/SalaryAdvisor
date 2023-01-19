@@ -71,6 +71,11 @@ func (c Cash) String() string {
 	return dollarsBuilder.String() + cents
 }
 
+// String, but for JSON marshalling
+func (c Cash) MarshalText() (text []byte, err error) {
+	return []byte(c.String()), nil
+}
+
 // Return a given percentage of this money
 func (c Cash) Percentage(p Percentage) (Cash, error) {
 	// Quick special case for 0
