@@ -18,7 +18,7 @@ type Percentage int64
 // Valid strings examples are:
 // "10%", "60.5", "%100", "12.34%", "-43.29"
 func NewPercentage(percentageStr string, allowNegative bool) (Percentage, error) {
-	i, err := parseFloat(percentageStr, allowNegative, 6)
+	i, err := parseNumber(percentageStr, allowNegative, 6)
 	return Percentage(i), err
 }
 

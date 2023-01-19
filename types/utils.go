@@ -25,7 +25,7 @@ var (
 // - If any dash is present in the string, it will be considered negative.
 // - Any additional dots ('.') and any digits after them will be ignored
 // Examples: ("ab-12.3456%cd.",false,2): 1234, ("ab-12.3456$cd.",true,4): -123456
-func parseFloat(numberStr string, allowNegative bool, allowedDecimals uint8) (int64, error) {
+func parseNumber(numberStr string, allowNegative bool, allowedDecimals uint8) (int64, error) {
 	isNegative := allowNegative && strings.Contains(numberStr, "-")
 	// Cleanup and split string
 	cleanStr := allowedInFloatRegex.ReplaceAllString(numberStr, "")
@@ -44,7 +44,7 @@ func parseFloat(numberStr string, allowNegative bool, allowedDecimals uint8) (in
 		number = i * exp
 	}
 	// Parse decimal
-	if len(numberParts) >= 2 && len(numberParts[1]) > 0 {
+	if len(numberParts) >= 2 && len(numberParts[1]) > 0 && allowedDecimals > 0 {
 		diff := int(allowedDecimals) - len(numberParts[1])
 		if diff < 0 {
 			numberParts[1] = numberParts[1][:allowedDecimals]
